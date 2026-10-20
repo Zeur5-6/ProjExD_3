@@ -178,7 +178,7 @@ class Explosion:
         引数 bomb:爆発する爆弾Bombインスタンス
         引数 life:爆発エフェクトの持続時間
         """
-        img = pg.image.load("fig/explosion.gif")
+        img = pg.image.load("fig/explosion.gif") #爆発画像の読み込み
         self.imgs = [img, pg.transform.flip(img, True, False)]  # 左右反転した画像も用意
         self.img = self.imgs[0]
         self.rct = self.img.get_rect()
