@@ -141,6 +141,30 @@ class Bomb:
         screen.blit(self.img, self.rct)
 
 
+class Score:
+    """
+    打ち落とした爆弾の数（スコア）を表示するクラス
+    """
+    def __init__(self):
+        """
+        スコア表示用の文字列Surfaceを生成する
+        """
+        self.fonto = pg.font.Font(None, 50)
+        self.color = (0, 0, 255)  # 文字色：青
+        self.value = 0  # スコアの初期値
+        self.img = self.fonto.render(f"Score: {self.value}", 0, self.color)
+        self.rct = self.img.get_rect()
+        self.rct.center = (100, HEIGHT - 50)  # 画面左下
+
+    def update(self, screen: pg.Surface):
+        """
+        現在のスコアを表示させる文字列Surfaceを生成し，画面に転送する
+        引数 screen：画面Surface
+        """
+        self.img = self.fonto.render(f"Score: {self.value}", 0, self.color)
+        screen.blit(self.img, self.rct)
+
+
 def main():
     pg.display.set_caption("たたかえ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))    
@@ -148,6 +172,7 @@ def main():
     bird = Bird((300, 200))
     bomb = Bomb((255, 0, 0), 10)
     bombs = []
+    score = Score()
     for _ in range(NUM_OF_BOMBS):
         bombs.append(Bomb((255, 0, 0), 10))
     bombs = [Bomb((255, 0, 0), 10) for _ in range(NUM_OF_BOMBS)]
@@ -180,7 +205,9 @@ def main():
                     beam = None
                     bombs[i] = None
                     bird.change_img(6, screen)  # よろこびエフェクト
-                    pg.display.update()                    
+                    score.value += 1  # スコアを1増やす
+                    pg.display.update()
+                            
         bombs = [bomb for bomb in bombs if bomb is not None]  # Noneを取り除く
 
         key_lst = pg.key.get_pressed()
@@ -189,6 +216,7 @@ def main():
             beam.update(screen)  
         for bomb in bombs: 
             bomb.update(screen)
+        score.update(screen)  # スコアを更新
         pg.display.update()
         tmr += 1
         clock.tick(50)
